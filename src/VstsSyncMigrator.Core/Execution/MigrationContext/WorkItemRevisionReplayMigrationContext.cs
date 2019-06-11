@@ -201,14 +201,19 @@ namespace VstsSyncMigrator.Engine
                 {
                     if (newwit.Fields.Contains(me.ReflectedWorkItemIdFieldName))
                     {
-                        newwit.Fields["System.ChangedBy"].Value = "your name";
+                        //newwit.Fields["System.ChangedBy"].Value = "your name";
                         newwit.Fields[me.ReflectedWorkItemIdFieldName].Value =
                             sourceStore.CreateReflectedWorkItemId(sourceWorkItem);
                     }
-                    var history = new StringBuilder();
-                    history.Append(
-                        "Migrated by <a href='https://dev.azure.com/nkdagility/migration-tools/'>Azure DevOps Migration Tools</a>");
-                    newwit.History = history.ToString();
+
+                    if (newwit.Fields.Contains("TfsId"))
+                    {
+                        newwit.Fields["TfsId"].Value = sourceWorkItem.Id;
+                    }
+                    // var history = new StringBuilder();
+                    // history.Append(
+                    //     "Migrated by <a href='https://dev.azure.com/nkdagility/migration-tools/'>Azure DevOps Migration Tools</a>");
+                    // newwit.History = history.ToString();
 
                     newwit.Save();
                     newwit.Close();
